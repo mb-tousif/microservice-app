@@ -4,14 +4,19 @@ import { TUser, TUserFilterableOptions } from "./user.interfaces";
 import { User } from "./user.model";
 import { IPaginationOptions } from "../../../types/common";
 import { PaginationHandler } from "../../../utils/paginationHelper";
-import { userSearchableFields } from "./user.constants";
+import { EVENT_USER_CREATED, userSearchableFields } from "./user.constants";
 import { SortOrder } from "mongoose";
+import { RedisClient } from "../../../utils/redis";
 
 // Create a new user
 const createUser = async (userInfo: TUser) => {
   const result = await User.create(userInfo);
   if (!result) {
     throw new CustomApiError(httpStatus.BAD_REQUEST, "User not created");
+  }
+
+  if (result) {
+    await RedisClient.publish(EVENT_USER_CREATED, JSON.stringify(result));
   }
   return result;
 };

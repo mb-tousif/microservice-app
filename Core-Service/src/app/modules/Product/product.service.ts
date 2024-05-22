@@ -6,6 +6,8 @@ import { PaginationHandler } from "../../../utils/paginationHelper";
 import { IPaginationOptions } from "../../../types/common";
 import { userSearchableFields } from "../User/user.constants";
 import { SortOrder } from "mongoose";
+import { RedisClient } from "../../../utils/redis";
+import { EVENT_PRODUCT_CREATED, EVENT_PRODUCT_DELETED, EVENT_PRODUCT_FETCHED, EVENT_PRODUCT_UPDATED } from "./product.constants";
 
 const createProduct = async ( payload: TProduct ) => {
     const isProductExist = await Product.findOne({ title: payload.title });
@@ -15,6 +17,9 @@ const createProduct = async ( payload: TProduct ) => {
     const result = await Product.create(payload);
     if (!result) {
         throw new CustomApiError(httpStatus.BAD_REQUEST, "Product not created");
+    }
+    if (result) {
+        await RedisClient.publish(EVENT_PRODUCT_CREATED, JSON.stringify(result));
     }
     return result;
 }
@@ -67,6 +72,9 @@ const getProductById = async ( payload: string ) => {
     if (!product) {
         throw new CustomApiError(httpStatus.NOT_FOUND, "Product not found");
     }
+    if (product) {
+      await RedisClient.publish(EVENT_PRODUCT_FETCHED, JSON.stringify(product));
+    }
     return product;
 };
 
@@ -77,6 +85,9 @@ const updateProduct = async ( id:string, payload: TProduct ) => {
     if (!product) {
         throw new CustomApiError(httpStatus.NOT_FOUND, "Product update failed");
     }
+    if (product) {
+        await RedisClient.publish(EVENT_PRODUCT_UPDATED, JSON.stringify(product));
+    }
     return product;
 }
 
@@ -84,6 +95,9 @@ const deleteProduct = async ( id:string ) => {
     const product = await Product.findByIdAndDelete({ _id: id });
     if (!product) {
         throw new CustomApiError(httpStatus.NOT_FOUND, "Product delete failed");
+    }
+    if (product) {
+        await RedisClient.publish(EVENT_PRODUCT_DELETED, JSON.stringify(product));
     }
     return product;
 }

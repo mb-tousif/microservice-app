@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
+import { ErrorRequestHandler } from "express";
+import RateLimitError from "express-rate-limit";
 import { ZodError } from "zod";
 import config from "../Config";
 import CustomApiError from "./customErrorHandler";
@@ -16,8 +15,17 @@ const GlobalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
   let statusCode;
   let message;
   let errorMessages: IGenericErrorMessage[] = [];
-
-  if (error?.name === "ValidationError") {
+  if (error instanceof RateLimitError) {
+    statusCode =  httpStatus.TOO_MANY_REQUESTS;
+    message = "Exceeded the limit of requests";
+    errorMessages = [
+      {
+        path: "rate-limit",
+        message: "Too many requests, please try again later.",
+      },
+    ];
+  }
+  else if (error?.name === "ValidationError") {
     const simplifiedError = MongooseValidationError(error);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;

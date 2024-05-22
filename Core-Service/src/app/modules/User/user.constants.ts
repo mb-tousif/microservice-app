@@ -12,3 +12,5 @@ export const userFilterableFields: string[] = [
   "email",
   "address",
 ];
+
+export const EVENT_USER_CREATED = "user-created";

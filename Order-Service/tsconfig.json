@@ -13,6 +13,5 @@
     /* Completeness */
     "skipLibCheck": true
   },
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules", "dist", "generateFile.ts"]
+  "include": ["**/*.ts"]
 }

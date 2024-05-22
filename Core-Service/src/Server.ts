@@ -1,11 +1,13 @@
 import { Server } from "http";
 import config from "./Config";
 import mongoose from "mongoose";
+import { RedisClient } from "./utils/redis";
 
 let server: Server;
 
 const BootstrapApp = async () => {
   try {
+    await RedisClient.connect();
     await mongoose.connect(config.database_url as string);
     console.info(`🗂️ MongoDB Server connected`);
   } catch (error) {

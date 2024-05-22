@@ -1,4 +1,5 @@
 import { ErrorRequestHandler } from "express";
+import RateLimitError from "express-rate-limit";
 import { ZodError } from "zod";
 import config from "../Config";
 import CustomApiError from "./customErrorHandler";
@@ -14,17 +15,26 @@ const GlobalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
   let message;
   let errorMessages: IGenericErrorMessage[] = [];
 
-  if (error?.name === 'PrismaClientKnownRequestError') {
-      message = error?.message;
-      errorMessages = error?.message
-        ? [
-            {
-              path: '',
-              message: error?.message,
-            },
-          ]
-        : [];
-      } else if (error instanceof ZodError) {
+  if (error instanceof RateLimitError) {
+    statusCode = httpStatus.TOO_MANY_REQUESTS;
+    message = "Exceeded the limit of requests";
+    errorMessages = [
+      {
+        path: "rate-limit",
+        message: "Too many requests, please try again later.",
+      },
+    ];
+  } else if (error?.name === "PrismaClientKnownRequestError") {
+    message = error?.message;
+    errorMessages = error?.message
+      ? [
+          {
+            path: "",
+            message: error?.message,
+          },
+        ]
+      : [];
+  } else if (error instanceof ZodError) {
     const simplifiedError = HandleZodError(error);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
