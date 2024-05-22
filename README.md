@@ -4,6 +4,6 @@ This is a Microservices based E-Commerce Platform built using Node.js, Express.j
 ---
 
 ## For Detailed Information
-- [Core Service]("/Core-Service/README.md")
-- [Inventory Service]("/Inventory-Service/README.md")
-- [Order Service]("/Order-Service/README.md")
+- [Core Service]("./Core-Service/README.md")
+- [Inventory Service]("./Inventory-Service/README.md")
+- [Order Service]("./Order-Service/README.md")
