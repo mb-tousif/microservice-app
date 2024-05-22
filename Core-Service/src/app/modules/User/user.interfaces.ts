@@ -2,10 +2,14 @@ import { Model } from "mongoose";
 
 export type TUserFilterableOptions = {
     search?: string;
+    name?: string;
+    role?: string;
+    email?: string;
+    address?: string;
 }
 
 export type TUser = {
-  _id?: string;
+  id?: string;
   name?: string;
   email: string;
   password: string;

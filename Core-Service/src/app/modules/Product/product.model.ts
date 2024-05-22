@@ -5,13 +5,13 @@ const productSchema = new Schema<TProduct>(
   {
     title: {
       type: String,
+      unique: true,
       required: [true, "Title is required"],
     },
     description: {
       type: String,
       default:
         "Product Description is not available, Please contact the seller for more information.",
-
     },
     price: {
       type: String,
@@ -30,6 +30,9 @@ const productSchema = new Schema<TProduct>(
   },
   {
     timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
   }
 );
 

@@ -15,7 +15,7 @@ const moduleRoutes = [
     routes: UserRoutes,
   },
   {
-    path: "products",
+    path: "/products",
     routes: ProductRoutes
   }
 ];
