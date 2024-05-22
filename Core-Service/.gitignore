@@ -2,3 +2,6 @@ node_modules
 .env
 dist
 generateFile.ts
+data
+.git
+./src/utils/nodeMailer.ts

@@ -3,6 +3,8 @@ import express, { Application, NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
 import config from "./Config";
 import router from "./app/routes";
+import BootstrapApp from "./Server";
+import GlobalErrorHandler from "./Error/globalErrorHandler";
 
 const App: Application = express();
 
@@ -12,6 +14,8 @@ App.use(cors());
 App.use(express.json());
 App.use(express.urlencoded({ extended: true }));
 
+BootstrapApp();
+
 App.use("/api/v1", router);
 
 App.get("/", (req, res) => {
@@ -20,7 +24,12 @@ App.get("/", (req, res) => {
   );
 });
 
+App.listen(config.port, () => {
+  console.info(`Server running 🚀 on port ${config.port}`);
+});
+
 //global error handler
+App.use(GlobalErrorHandler);
 
 //handle not found
 App.use((req: Request, res: Response, next: NextFunction) => {
@@ -30,7 +39,7 @@ App.use((req: Request, res: Response, next: NextFunction) => {
     errorMessages: [
       {
         path: req.originalUrl,
-        message: "API Not Found",
+        message: `🚦 Requested ${req.originalUrl} this Route Not Found 💥`,
       },
     ],
   });

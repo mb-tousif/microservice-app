@@ -4,7 +4,7 @@ import App from "./App";
 
 async function Bootstrap() {
   const server: Server = App.listen(config.port, () => {
-    console.log(`Server running on port ${config.port}`);
+    console.info(`Server running 🚀 on port ${config.port}`);
   });
 
   const exitHandler = () => {
