@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,19 +7,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String
-  password  String
-  gender    String
-  role      String   @default("user")
-  imgUrl    String   @default("https://img.freepik.com/free-psd/3d-illustration-bald-person-with-glasses_23-2149436184.jpg")
-  address   String
-  contact   String
+model ProductTotalQuantity {
+  id       String @id @default(uuid())
+  quantity Int
+  productId String @unique
+  status String @default("available")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("users")
+  ProductInventory ProductInventory[]
+
+  @@map("product_total_quantity")
+}
+
+model ProductInventory {
+  id       String @id @default(uuid())
+  productId String @unique
+  soldQuantity Int @default(0)
+  shippedQuantity Int @default(0)
+  availableQuantity Int
+  productTotalQuantityId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  ProductTotalQuantity ProductTotalQuantity @relation(fields: [productTotalQuantityId], references: [id])
+
+  @@map("product_inventory")
 }

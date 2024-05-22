@@ -8,19 +8,48 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-model User {
+model Order {
   id        String   @id @default(uuid())
-  name      String
-  email     String
-  password  String
-  gender    String
-  role      String   @default("user")
-  imgUrl    String   @default("https://img.freepik.com/free-psd/3d-illustration-bald-person-with-glasses_23-2149436184.jpg")
-  address   String
-  contact   String
+  productId String
+  quantity  Int
+  price     Float
+  status    String  @default("Pending")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("users")
+  payments Payment[]
+  shippings Shipping[]
+
+  @@map("orders")
+}
+
+model Payment {
+  id        String   @id @default(uuid())
+  orderId   String
+  userId    String
+  amount    Float
+  status    String  @default("Paid")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id])
+  shipping Shipping[]
+
+  @@map("payments")
+}
+
+model Shipping {
+  id        String   @id @default(uuid())
+  orderId   String
+  paymentId String
+  userId    String
+  address   String
+  status    String  @default("Deliver processing")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id])
+  payment Payment @relation(fields: [paymentId], references: [id])
+
+  @@map("shippings")
 }
