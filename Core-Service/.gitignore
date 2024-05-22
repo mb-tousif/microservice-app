@@ -4,4 +4,3 @@ dist
 generateFile.ts
 data
 .git
-./src/utils/nodeMailer.ts
