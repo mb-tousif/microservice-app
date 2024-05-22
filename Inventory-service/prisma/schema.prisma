@@ -25,7 +25,7 @@ model ProductInventory {
   productId String @unique
   soldQuantity Int @default(0)
   shippedQuantity Int @default(0)
-  availableQuantity Int
+  availableQuantity Int @default(0)
   productTotalQuantityId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

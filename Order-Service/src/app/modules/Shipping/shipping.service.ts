@@ -2,13 +2,18 @@ import httpStatus from "http-status";
 import { IPaginationOptions } from "../../../types/common";
 import { PaginationHandler } from "../../../utils/paginationHelper";
 import prisma from "../../../utils/prisma";
+import { TShipping } from "./shipping.interfaces";
 
 // Post shipping data to database
-const createShipping = async ()=> {
+const createShipping = async ( payload: TShipping )=> {
+  const result = await prisma.shipping.create({
+    data: payload,
+  });
+  return result;
 };
 
 // Get all shippings
-const getAllShippings = async (
+const getAllShipping = async (
   options: IPaginationOptions,
 ) => {
   // Handle pagination
@@ -34,6 +39,6 @@ const getAllShippings = async (
 
 export const ShippingService = {
   createShipping,
-  getAllShippings,
+  getAllShipping,
 };
 

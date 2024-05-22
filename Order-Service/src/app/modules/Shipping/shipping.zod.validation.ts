@@ -30,7 +30,7 @@ const updateValidation = z.object({
   }),
 });
 
-export const shippingValidation = {
+export const ShippingValidation = {
   postValidation,
   updateValidation,
 };

@@ -1,4 +1,4 @@
-export type ProductInventory = {
+export type TProductInventory = {
   id?: string;
   productId: string;
   soldQuantity?: number;

@@ -27,6 +27,8 @@ This is the core service of the E-Commerce Platform. It is responsible for manag
   - `BCRYPT_SALT_ROUNDS` - Number of salt rounds for Bcrypt
   - `JWT_SECRET` - Secret key for JWT
   - `JWT_EXPIRES_IN` - Expiry time for JWT
+  - `REDIS_URL` - Redis connection string
+  - `REDIS_EXPIRES_IN` - Expiry time for Redis cache
 
 - Run `npm run dev` to start the server in development mode
 

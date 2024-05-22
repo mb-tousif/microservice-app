@@ -14,7 +14,7 @@ services:
       REDIS_URL: ${REDIS_URL}
       REDIS_EXPIRES_IN: ${REDIS_EXPIRES_IN}
     ports:
-      - 3000:3000
+      - 5000:5000
     depends_on:
       - database
       - redis
