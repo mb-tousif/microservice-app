@@ -2,7 +2,6 @@ import cors from "cors";
 import express, { Application, NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
 import config from "./Config";
-import router from "./app/routes";
 
 const App: Application = express();
 
@@ -12,7 +11,7 @@ App.use(cors());
 App.use(express.json());
 App.use(express.urlencoded({ extended: true }));
 
-App.use("/api/v1", router);
+// App.use("/api/v1");
 
 App.get("/", (req, res) => {
   res.send(

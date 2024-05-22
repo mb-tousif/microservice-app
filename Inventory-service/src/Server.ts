@@ -1,27 +1,23 @@
 import { Server } from "http";
 import config from "./Config";
-import mongoose from "mongoose";
+import App from "./App";
 
-let server: Server;
+async function Bootstrap() {
+  const server: Server = App.listen(config.port, () => {
+    console.log(`Server running on port ${config.port}`);
+  });
 
-const BootstrapApp = async () => {
-  try {
-    await mongoose.connect(config.database_url as string);
-    console.info(`🗂️ MongoDB Server connected`);
-  } catch (error) {
-    console.warn(error);
-  }
   const exitHandler = () => {
     if (server) {
       server.close(() => {
-        console.warn("Server closed");
+        console.log("Server closed successfully 💥")
       });
     }
     process.exit(1);
   };
 
   const unexpectedErrorHandler = (error: unknown) => {
-    console.warn(error);
+    console.error(error);
     exitHandler();
   };
 
@@ -34,6 +30,6 @@ const BootstrapApp = async () => {
       server.close();
     }
   });
-};
+}
 
-export default BootstrapApp;
+Bootstrap();
